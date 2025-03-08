@@ -4,7 +4,6 @@ import { UsuarioRepository } from './usuario.repository'
 
 @Controller('usuario')
 export class UsuarioController {
-
     constructor(private repo: UsuarioRepository) { }
 
     @Post()

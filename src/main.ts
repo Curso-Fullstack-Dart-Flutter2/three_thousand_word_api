@@ -10,3 +10,4 @@ bootstrap()
 // npx prisma migrate dev
 // npm run start:dev
 // nest g pr usuario/usuario.repository --flat --no-spec
+// nest g resource temp
