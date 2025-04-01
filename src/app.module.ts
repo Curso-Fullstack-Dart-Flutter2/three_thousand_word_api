@@ -7,9 +7,10 @@ import { TempModule } from './temp/temp.module'
 import { DbModule } from './db/db.module'
 import { DictionaryModule } from './dictionary/dictionary.module'
 import { WordsModule } from './words/words.module';
+import { TranslateModule } from './translate/translate.module';
 
 @Module({
-  imports: [ProdutoModule, UsuarioModule, TempModule, DbModule, DictionaryModule, WordsModule],
+  imports: [ProdutoModule, UsuarioModule, TempModule, DbModule, DictionaryModule, WordsModule, TranslateModule],
   controllers: [AppController],
   providers: [AppService],
 })
