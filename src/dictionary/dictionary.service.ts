@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
-import { DictionaryEntity } from './entities/dictionary.entity';
+import { DictionaryEntity } from './entities/dictionary.entity'
 
 @Injectable()
 export class DictionaryService {

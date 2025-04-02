@@ -6,7 +6,7 @@ export class TranslateController {
   constructor(private readonly translateService: TranslateService) {}
 
   @Get(':word')
-  findOne(@Param('word') word: string) {
-    return this.translateService.findOne(word)
+  getWordTranslate(@Param('word') word: string) {
+    return this.translateService.getWordTranslate(word)
   }
 }
