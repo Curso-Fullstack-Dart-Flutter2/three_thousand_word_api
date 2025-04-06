@@ -10,9 +10,9 @@ export class TranslateService {
 
   constructor(private readonly httpService: HttpService) { }
 
-  getWordTranslate(word: string, targetLang: string): Promise<any> {
+  async getWordTranslate(word: string, targetLang: string): Promise<any> {
     try {
-      const response = this.httpService.post<Translate>(
+      const response = await this.httpService.post<Translate>(
         this.apiUrl,
         new URLSearchParams({
           text: word,
@@ -31,7 +31,7 @@ export class TranslateService {
       throw new HttpException(
         error.response?.data || 'Translation failed',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      )
     }
   }
 }

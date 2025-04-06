@@ -7,6 +7,6 @@ export class TranslateController {
 
   @Get(':word')
   getWordTranslate(@Param('word') word: string) {
-    return this.translateService.getWordTranslate(word)
+    return this.translateService.getWordTranslate(word, 'PT-BR')
   }
 }

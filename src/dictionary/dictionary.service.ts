@@ -20,7 +20,7 @@ export class DictionaryService {
       throw new HttpException(
         'Word not found or API error',
         HttpStatus.NOT_FOUND,
-      );
+      )
     }
   }
 }
