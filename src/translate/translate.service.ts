@@ -2,13 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { firstValueFrom } from 'rxjs'
 import { Translate } from './entities/translate.entity'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class TranslateService {
-  private readonly apiUrl = 'https://api-free.deepl.com/v2/translate'
-  private readonly apiKey = '***********'
+  constructor(private readonly httpService: HttpService, private configService: ConfigService) { }
 
-  constructor(private readonly httpService: HttpService) { }
+  private readonly apiUrl = 'https://api-free.deepl.com/v2/translate'
+  private readonly apiKey = this.configService.get<string>('translate_api_key_env')
 
   async getWordTranslate(word: string, targetLang: string): Promise<any> {
     try {

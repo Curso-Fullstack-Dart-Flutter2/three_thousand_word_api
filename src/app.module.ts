@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common'
+
+import { ConfigModule } from '@nestjs/config'
+
 import { ProdutoModule } from './produto/produto.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -12,7 +15,20 @@ import { FirebaseModule } from './firebase/firebase.module'
 import { FirebaseController } from './firebase/firebase.controller'
 
 @Module({
-  imports: [ProdutoModule, UsuarioModule, TempModule, DbModule, DictionaryModule, WordsModule, TranslateModule, FirebaseModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
+    ProdutoModule, 
+    UsuarioModule, 
+    TempModule, 
+    DbModule, 
+    DictionaryModule, 
+    WordsModule, 
+    TranslateModule, 
+    FirebaseModule
+  ],
   controllers: [AppController, FirebaseController],
   providers: [AppService],
 })

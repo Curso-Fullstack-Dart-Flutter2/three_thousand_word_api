@@ -35,6 +35,8 @@ export class FirebaseAdminService implements OnModuleInit {
 
     const apiKey = param.defaultValue.value
 
+    console.log('API_KEY:', apiKey)
+
     return apiKey
   }
 }
