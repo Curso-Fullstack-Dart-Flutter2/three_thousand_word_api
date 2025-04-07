@@ -13,6 +13,7 @@ import { WordsModule } from './words/words.module'
 import { TranslateModule } from './translate/translate.module'
 import { FirebaseModule } from './firebase/firebase.module'
 import { FirebaseController } from './firebase/firebase.controller'
+import { WordsInfoModule } from './words-info/words-info.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { FirebaseController } from './firebase/firebase.controller'
     DictionaryModule, 
     WordsModule, 
     TranslateModule, 
-    FirebaseModule
+    FirebaseModule, WordsInfoModule
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService],

@@ -11,7 +11,7 @@ export class TranslateService {
   private readonly apiUrl = 'https://api-free.deepl.com/v2/translate'
   private readonly apiKey = this.configService.get<string>('translate_api_key_env')
 
-  async getWordTranslate(word: string, targetLang: string): Promise<any> {
+  async translateWord(word: string, targetLang: string): Promise<any> {
     try {
       const response = await this.httpService.post<Translate>(
         this.apiUrl,

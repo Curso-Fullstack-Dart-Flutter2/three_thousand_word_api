@@ -9,7 +9,7 @@ export class DictionaryService {
 
   constructor(private readonly httpService: HttpService) { }
 
-  async getWord(word: string): Promise<DictionaryEntity[]> {
+  async getPronunciation(word: string): Promise<DictionaryEntity[]> {
     try {
       const response = await firstValueFrom(
         this.httpService.get<DictionaryEntity[]>(`${this.apiUrl}/${word}`),

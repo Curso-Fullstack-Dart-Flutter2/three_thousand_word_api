@@ -1,5 +1,6 @@
 export interface DictionaryEntity {
     word: string
+    phonetic?: string
     phonetics: PhoneticEntity[]
     meanings: MeaningEntity[]
     license: LicenseEntity
