@@ -10,7 +10,7 @@ export class WordsInfoService {
     private readonly wordsService: WordsService,
     private readonly dictionaryService: DictionaryService,
     private readonly translateService: TranslateService,
-  ) {}
+  ) { }
 
   async getWordsInfo() {
     const words = this.wordsService.getWords()
@@ -21,8 +21,7 @@ export class WordsInfoService {
         let pronuncia = ''
 
         try {
-          const translation = await this.translateService.translateWord(word, 'PT')
-          traducao = translation.translations?.[0]?.text || ''
+          traducao = await this.translateService.translateText(word, 'PT')
         } catch (err) {
           traducao = ''
         }
@@ -31,7 +30,7 @@ export class WordsInfoService {
           pronuncia = await this.dictionaryService.getPhoneticText(word)
         } catch (err) {
           pronuncia = ''
-        }        
+        }
 
         return {
           palavra: word,

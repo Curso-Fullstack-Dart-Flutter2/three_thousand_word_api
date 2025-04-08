@@ -35,4 +35,13 @@ export class TranslateService {
       )
     }
   }
+
+  async translateText(word: string, targetLang: string): Promise<string> {
+    try {
+      const response = await this.translateWord(word, targetLang)
+      return response.translations?.[0]?.text || ''
+    } catch (error) {
+      return ''
+    }
+  }
 }
