@@ -16,3 +16,10 @@ model Usuario {
   email String  @unique
   ativo Boolean @default(true)
 }
+
+model WordInfo {
+  id        Int    @id @default(autoincrement())
+  palavra   String
+  traducao  String
+  pronuncia String
+}

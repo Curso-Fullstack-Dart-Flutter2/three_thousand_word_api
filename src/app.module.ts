@@ -13,7 +13,8 @@ import { WordsModule } from './words/words.module'
 import { TranslateModule } from './translate/translate.module'
 import { FirebaseModule } from './firebase/firebase.module'
 import { FirebaseController } from './firebase/firebase.controller'
-import { WordsInfoModule } from './words-info/words-info.module';
+import { WordsInfoModule } from './words-info/words-info.module'
+import { WordsInfoSeederModule } from './words-info-seeder/words-info-seeder.module'
 
 @Module({
   imports: [
@@ -28,7 +29,9 @@ import { WordsInfoModule } from './words-info/words-info.module';
     DictionaryModule, 
     WordsModule, 
     TranslateModule, 
-    FirebaseModule, WordsInfoModule
+    FirebaseModule, 
+    WordsInfoModule, 
+    WordsInfoSeederModule
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService],

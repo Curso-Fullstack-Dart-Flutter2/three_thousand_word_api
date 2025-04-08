@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/db/prisma.service';
-import Usuario from './usuario.entity';
+import { PrismaService } from 'src/db/prisma.service'
+import Usuario from './usuario.entity'
 
 @Injectable()
 export class UsuarioRepository {
     constructor(private prismaService: PrismaService) { }
 
     async obterTodos() {
-        return this.prismaService.usuario.findMany();
+        return this.prismaService.usuario.findMany()
     }
 
     async obterPorId(id: number) {
@@ -15,13 +15,13 @@ export class UsuarioRepository {
             where: {
                 id: id.toString()
             }
-        });
+        })
     }
 
     async criar(usuario: Usuario) {
         return this.prismaService.usuario.create({
             data: usuario as any
-        });
+        })
     }
 
     async atualizar(usuario: Usuario) {
@@ -40,6 +40,6 @@ export class UsuarioRepository {
             where: {
                 id: id.toString()
             }
-        });
+        })
     }
 }
