@@ -13,7 +13,7 @@ export class WordsInfoService {
   ) {}
 
   async getWordsInfo() {
-    const words = this.wordsService.getWords() // [{ word: "apple" }, ...]
+    const words = this.wordsService.getWords()
 
     const wordsInfo = await Promise.all(
       words.map(async ({ word }) => {
@@ -28,11 +28,10 @@ export class WordsInfoService {
         }
 
         try {
-          const dictionary = await this.dictionaryService.getPronunciation(word)
-          pronuncia = dictionary?.[0]?.phonetic || dictionary?.[0]?.phonetics?.[0]?.text || ''
+          pronuncia = await this.dictionaryService.getPhoneticText(word)
         } catch (err) {
           pronuncia = ''
-        }
+        }        
 
         return {
           palavra: word,

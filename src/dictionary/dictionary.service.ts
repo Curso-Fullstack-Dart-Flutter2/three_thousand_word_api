@@ -23,4 +23,21 @@ export class DictionaryService {
       )
     }
   }
+
+  async getPhoneticText(word: string): Promise<string> {
+    try {
+      const entries = await this.getPronunciation(word)
+      const entry = entries[0]
+
+      if (!entry) return ''
+      
+      if (entry.phonetic) return entry.phonetic
+
+      const phoneticText = entry.phonetics.find(p => p.text)?.text
+
+      return phoneticText || ''
+    } catch (error) {
+      return ''
+    }
+  }
 }
