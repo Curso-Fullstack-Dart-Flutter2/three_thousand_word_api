@@ -7,5 +7,6 @@ import { DictionaryController } from './dictionary.controller'
   imports: [HttpModule],
   controllers: [DictionaryController],
   providers: [DictionaryService],
+  exports: [DictionaryService],
 })
 export class DictionaryModule {}

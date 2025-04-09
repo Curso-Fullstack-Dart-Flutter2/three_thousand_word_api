@@ -7,5 +7,6 @@ import { TranslateController } from './translate.controller'
   imports: [HttpModule],
   controllers: [TranslateController],
   providers: [TranslateService],
+  exports: [TranslateService],
 })
 export class TranslateModule {}

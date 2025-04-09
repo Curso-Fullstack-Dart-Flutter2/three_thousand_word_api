@@ -7,9 +7,9 @@ export class DictionaryController {
   constructor(private readonly dictionaryService: DictionaryService) { }
 
   @Get(':word')
-  async getWord(@Param('word') word: string): Promise<DictionaryEntity[]> {
+  async getWord(@Param('word') word: string): Promise<string> {
     try {
-      return await this.dictionaryService.getWord(word)
+      return await this.dictionaryService.getPhoneticText(word)
     } catch (error) {
       throw new NotFoundException('Word not found')
     }

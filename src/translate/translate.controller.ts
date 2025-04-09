@@ -6,7 +6,7 @@ export class TranslateController {
   constructor(private readonly translateService: TranslateService) {}
 
   @Get(':word')
-  getWordTranslate(@Param('word') word: string) {
-    return this.translateService.getWordTranslate(word, 'PT-BR')
+  async getWordTranslate(@Param('word') word: string): Promise<string> {
+    return await this.translateService.translateText(word, 'PT-BR')
   }
 }

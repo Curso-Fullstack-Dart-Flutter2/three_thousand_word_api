@@ -10,7 +10,7 @@ export class WordsInfoSeederService {
   ) { }
 
   async seedWordsInfo() {
-    const wordsInfo = await this.wordsInfoService.getWordsInfo();
+    const wordsInfo = await this.wordsInfoService.getWordsInfo()
 
     const created = await this.prisma.wordInfo.createMany({
       data: wordsInfo.map(({ palavra, traducao, pronuncia }) => ({
