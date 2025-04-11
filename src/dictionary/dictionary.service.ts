@@ -35,7 +35,7 @@ export class DictionaryService {
 
       const phoneticText = entry.phonetics.find(p => p.text)?.text
 
-      return phoneticText || ''
+      return phoneticText || 'pronunciation not found'
     } catch (error) {
       return ''
     }

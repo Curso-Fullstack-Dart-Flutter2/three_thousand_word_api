@@ -12,34 +12,23 @@ export class WordsInfoService {
     private readonly translateService: TranslateService,
   ) { }
 
-  async getWordsInfo() {
-    const words = this.wordsService.getWords()
+  async getWordInfo(word: string): Promise<{ palavra: string; traducao: string; pronuncia: string }> {
+    const [translateResponse, dictionaryResponse] = await Promise.all([
+      this.translateService.translateText(word, 'PT'),
+      this.dictionaryService.getPhoneticText(word),
+    ])
 
-    const wordsInfo = await Promise.all(
-      words.map(async ({ word }) => {
-        let traducao = ''
-        let pronuncia = ''
+    const traducao = translateResponse
+    const pronuncia = dictionaryResponse
 
-        try {
-          traducao = await this.translateService.translateText(word, 'PT')
-        } catch (err) {
-          traducao = ''
-        }
+    return {
+      palavra: word,
+      traducao,
+      pronuncia,
+    }
+  }
 
-        try {
-          pronuncia = await this.dictionaryService.getPhoneticText(word)
-        } catch (err) {
-          pronuncia = ''
-        }
-
-        return {
-          palavra: word,
-          traducao,
-          pronuncia,
-        }
-      }),
-    )
-
-    return wordsInfo
+  async getWordsOnly(): Promise<{ word: string }[]> {
+    return this.wordsService.getWords()
   }
 }

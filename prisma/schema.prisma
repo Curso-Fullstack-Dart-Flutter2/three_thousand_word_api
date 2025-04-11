@@ -19,7 +19,7 @@ model Usuario {
 
 model WordInfo {
   id        Int    @id @default(autoincrement())
-  palavra   String
+  palavra   String @unique
   traducao  String
   pronuncia String
 }

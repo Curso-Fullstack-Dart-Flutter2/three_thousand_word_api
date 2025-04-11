@@ -7,6 +7,6 @@ export class WordsInfoController {
 
   @Get()
   async getWordsInfo() {
-    return await this.wordsInfoService.getWordsInfo()
+    return await this.wordsInfoService.getWordsOnly()
   }
 }
