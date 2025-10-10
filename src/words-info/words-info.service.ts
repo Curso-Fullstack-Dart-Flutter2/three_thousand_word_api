@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { WordsService } from 'src/words/words.service'
 import { DictionaryService } from 'src/dictionary/dictionary.service'
@@ -41,11 +41,18 @@ export class WordsInfoService {
   }
 
   async getWordsInfoPaginated(page = 1, limit = 20) {
-    const skip = (page - 1) * limit
+    if (page < 1) {
+      throw new BadRequestException('O número da página deve ser maior ou igual a 1.');
+    }
+    
+    const pageNumber = Math.max(1, page);
+    const skip = (pageNumber - 1) * limit
+
+    console.log('skip:', skip, 'limit:', limit)
 
     const [data, total] = await Promise.all([
       this.prisma.wordInfo.findMany({
-        skip,
+        skip: skip,
         take: limit,
         orderBy: { palavra: 'asc' },
       }),

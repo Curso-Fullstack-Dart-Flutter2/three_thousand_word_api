@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common'
+import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common'
 import { WordsInfoService } from './words-info.service'
 
 @Controller('words-info')
@@ -7,8 +7,8 @@ export class WordsInfoController {
 
   @Get()
   async getWordsInfo(
-    @Query('page') page = 1,
-    @Query('limit') limit = 20,
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 20,
   ) {
     return await this.wordsInfoService.getWordsInfoPaginated(+page, +limit)
   }
