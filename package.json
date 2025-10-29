@@ -27,7 +27,7 @@
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^10.4.15",
     "@nestjs/mapped-types": "*",
-    "@nestjs/platform-express": "^10.4.15",
+    "@nestjs/platform-express": "^10.4.20",
     "@prisma/client": "^6.4.1",
     "@vercel/node": "^5.5.0",
     "firebase-admin": "^13.2.0",
