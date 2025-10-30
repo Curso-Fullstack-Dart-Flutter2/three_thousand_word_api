@@ -1,7 +1,9 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common'
+import { Controller, Get, ParseIntPipe, Query, UseGuards } from '@nestjs/common'
+import { ApiKeyGuard } from '../common/guards/api-key.guard'
 import { WordsInfoService } from './words-info.service'
 
 @Controller('words-info')
+@UseGuards(ApiKeyGuard)
 export class WordsInfoController {
   constructor(private readonly wordsInfoService: WordsInfoService) { }
 
