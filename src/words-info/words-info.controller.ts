@@ -3,9 +3,9 @@ import { ApiKeyGuard } from '../common/guards/api-key.guard'
 import { WordsInfoService } from './words-info.service'
 
 @Controller('words-info')
-@UseGuards(ApiKeyGuard)
+@UseGuards(new ApiKeyGuard('public'))
 export class WordsInfoController {
-  constructor(private readonly wordsInfoService: WordsInfoService) { }
+  constructor(private readonly wordsInfoService: WordsInfoService) {}
 
   @Get()
   async getWordsInfo(
