@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/db/prisma.service'
 import { WordsInfoService } from 'src/words-info/words-info.service'
+import * as fs from 'fs'
+import * as path from 'path'
+import csv from 'csv-parser'
 
 @Injectable()
 export class WordsInfoSeederService {
@@ -9,9 +12,9 @@ export class WordsInfoSeederService {
     private readonly wordsInfoService: WordsInfoService,
   ) {}
 
-  private readonly CHUNK_SIZE = 10
+  private readonly CHUNK_SIZE = 50
   private readonly RETRIES = 3
-  private readonly DELAY_MS = 1000
+  private readonly DELAY_MS = 500
 
   private async withRetry<T>(fn: () => Promise<T>, retries = this.RETRIES, delayMs = this.DELAY_MS): Promise<T> {
     let attempts = 0
@@ -27,6 +30,7 @@ export class WordsInfoSeederService {
     throw new Error('Unexpected retry failure')
   }
 
+  // Mantém o método antigo
   async seedWordsInfo() {
     const allWords = await this.wordsInfoService.getWordsOnly()
     const total = allWords.length
@@ -73,5 +77,58 @@ export class WordsInfoSeederService {
       totalErros: erros.length,
       palavrasComErro: erros,
     }
+  }
+
+  // Novo método para popular a partir de CSV
+  async seedFromCsv(filename: string) {
+    const filePath = path.resolve(__dirname, filename)
+    const buffer: { palavra: string; traducao: string; pronuncia?: string }[] = []
+    let totalInseridos = 0
+    const erros: { palavra: string; motivo: string }[] = []
+
+    return new Promise<{ message: string; totalInseridos: number; totalErros: number; erros: any[] }>((resolve, reject) => {
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', async (row) => {
+          buffer.push(row)
+          if (buffer.length >= this.CHUNK_SIZE) {
+            this.processChunk(buffer.splice(0, buffer.length), erros)
+              .then((count) => {
+                totalInseridos += count
+                console.log(`✅ Inseridos até agora: ${totalInseridos}`)
+              })
+              .catch((err) => reject(err))
+          }
+        })
+        .on('end', async () => {
+          if (buffer.length > 0) {
+            const count = await this.processChunk(buffer, erros)
+            totalInseridos += count
+          }
+          resolve({ message: 'Banco populado a partir do CSV!', totalInseridos, totalErros: erros.length, erros })
+        })
+        .on('error', (err) => reject(err))
+    })
+  }
+
+  private async processChunk(
+    chunk: { palavra: string; traducao: string; pronuncia?: string }[],
+    erros: { palavra: string; motivo: string }[],
+  ): Promise<number> {
+    const results = await Promise.allSettled(
+      chunk.map(async (row) => {
+        try {
+          return await this.withRetry(() =>
+            this.prisma.wordInfo.create({
+              data: { palavra: row.palavra, traducao: row.traducao, pronuncia: row.pronuncia || null },
+            }),
+          )
+        } catch (err) {
+          erros.push({ palavra: row.palavra, motivo: err.message || 'Erro desconhecido' })
+          return null
+        }
+      }),
+    )
+    return results.filter(r => r.status === 'fulfilled' && r.value).length
   }
 }
