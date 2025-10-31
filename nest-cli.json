@@ -3,7 +3,9 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["src/wordinfo.csv"],
+    "assets": [
+      { "include": "**/*.csv", "outDir": "./dist" }
+    ],
     "deleteOutDir": true
   }
 }
