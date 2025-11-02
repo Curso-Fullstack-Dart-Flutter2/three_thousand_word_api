@@ -10,7 +10,7 @@ export class WordsInfoSeederService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly wordsInfoService: WordsInfoService,
-  ) {}
+  ) { }
 
   private readonly CHUNK_SIZE = 50
   private readonly RETRIES = 3
@@ -79,18 +79,34 @@ export class WordsInfoSeederService {
     }
   }
 
-  // Novo método para popular a partir de CSV
+  // Novo método para popular a partir de CSV (corrigido e mais robusto)
   async seedFromCsv(filename: string) {
     const filePath = path.resolve(__dirname, filename)
+    console.log(`📂 Lendo CSV de: ${filePath}`)
+
     const buffer: { palavra: string; traducao: string; pronuncia?: string }[] = []
     let totalInseridos = 0
     const erros: { palavra: string; motivo: string }[] = []
 
     return new Promise<{ message: string; totalInseridos: number; totalErros: number; erros: any[] }>((resolve, reject) => {
       fs.createReadStream(filePath)
-        .pipe(csv())
+        .pipe(
+          csv({
+            separator: ',', // força separador vírgula
+            skipLines: 0,
+            mapHeaders: ({ header }) => header.trim().toLowerCase(), // normaliza cabeçalhos
+          }),
+        )
         .on('data', async (row) => {
-          buffer.push(row)
+          // Normaliza campos e remove espaços/aspas
+          const palavra = row.palavra?.trim().replace(/^"|"$/g, '') || ''
+          const traducao = row.traducao?.trim().replace(/^"|"$/g, '') || ''
+          const pronuncia = row.pronuncia?.trim().replace(/^"|"$/g, '') || ''
+
+          if (!palavra) return // ignora linha sem palavra
+
+          buffer.push({ palavra, traducao, pronuncia })
+
           if (buffer.length >= this.CHUNK_SIZE) {
             this.processChunk(buffer.splice(0, buffer.length), erros)
               .then((count) => {
@@ -105,7 +121,14 @@ export class WordsInfoSeederService {
             const count = await this.processChunk(buffer, erros)
             totalInseridos += count
           }
-          resolve({ message: 'Banco populado a partir do CSV!', totalInseridos, totalErros: erros.length, erros })
+          console.log(`🎯 Total inseridos: ${totalInseridos}`)
+          if (erros.length) console.warn(`⚠️ Ocorreram ${erros.length} erros`)
+          resolve({
+            message: 'Banco populado a partir do CSV!',
+            totalInseridos,
+            totalErros: erros.length,
+            erros,
+          })
         })
         .on('error', (err) => reject(err))
     })
